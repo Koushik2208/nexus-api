@@ -1,0 +1,9 @@
+node_modules/
+.env
+dist/
+
+# dev-only docs
+project_state.md
+learning.md
+roadmap.md
+nexus_api.md
