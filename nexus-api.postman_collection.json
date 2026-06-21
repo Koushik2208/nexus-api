@@ -1,0 +1,340 @@
+{
+  "info": {
+    "name": "Nexus API",
+    "_postman_id": "nexus-api-collection",
+    "description": "Full test collection for Nexus API. Set the 'baseUrl' and 'apiKey' variables before running.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "https://your-vercel-url.vercel.app", "type": "string" },
+    { "key": "apiKey", "value": "your-api-key-here", "type": "string" },
+    { "key": "workspaceId", "value": "1", "type": "string" },
+    { "key": "userId", "value": "1", "type": "string" },
+    { "key": "userId2", "value": "2", "type": "string" },
+    { "key": "postId", "value": "1", "type": "string" },
+    { "key": "commentId", "value": "1", "type": "string" },
+    { "key": "notificationId", "value": "1", "type": "string" }
+  ],
+  "item": [
+    {
+      "name": "Health",
+      "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/health"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Workspaces",
+      "item": [
+        {
+          "name": "Create Workspace",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/workspaces",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"My Test Workspace\"\n}"
+            }
+          }
+        },
+        {
+          "name": "List Workspaces",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "x-api-key", "value": "{{apiKey}}" }],
+            "url": "{{baseUrl}}/workspaces"
+          }
+        },
+        {
+          "name": "Get Workspace by ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "x-api-key", "value": "{{apiKey}}" }],
+            "url": "{{baseUrl}}/workspaces/{{workspaceId}}"
+          }
+        },
+        {
+          "name": "Reset Workspace",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "x-api-key", "value": "{{apiKey}}" }],
+            "url": "{{baseUrl}}/workspaces/{{workspaceId}}/reset"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Create User",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "x-api-key", "value": "{{apiKey}}" }
+            ],
+            "url": "{{baseUrl}}/users",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"workspace_id\": {{workspaceId}},\n  \"username\": \"john_doe\",\n  \"display_name\": \"John Doe\",\n  \"bio\": \"Hello, I am John!\",\n  \"avatar_url\": \"https://i.pravatar.cc/150?u=john\"\n}"
+            }
+          }
+        },
+        {
+          "name": "List Users",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "x-api-key", "value": "{{apiKey}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/users?workspace_id={{workspaceId}}",
+              "query": [{ "key": "workspace_id", "value": "{{workspaceId}}" }]
+            }
+          }
+        },
+        {
+          "name": "Get User by ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "x-api-key", "value": "{{apiKey}}" }],
+            "url": "{{baseUrl}}/users/{{userId}}"
+          }
+        },
+        {
+          "name": "Get User Posts",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "x-api-key", "value": "{{apiKey}}" }],
+            "url": "{{baseUrl}}/users/{{userId}}/posts"
+          }
+        },
+        {
+          "name": "Get User Stats",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "x-api-key", "value": "{{apiKey}}" }],
+            "url": "{{baseUrl}}/users/{{userId}}/stats"
+          }
+        },
+        {
+          "name": "Get User Followers",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "x-api-key", "value": "{{apiKey}}" }],
+            "url": "{{baseUrl}}/users/{{userId}}/followers"
+          }
+        },
+        {
+          "name": "Get User Following",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "x-api-key", "value": "{{apiKey}}" }],
+            "url": "{{baseUrl}}/users/{{userId}}/following"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Posts",
+      "item": [
+        {
+          "name": "Create Post",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "x-api-key", "value": "{{apiKey}}" }
+            ],
+            "url": "{{baseUrl}}/posts",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"workspace_id\": {{workspaceId}},\n  \"user_id\": {{userId}},\n  \"content\": \"Hello world! This is my first post.\",\n  \"image_url\": null\n}"
+            }
+          }
+        },
+        {
+          "name": "Get Post by ID",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "x-api-key", "value": "{{apiKey}}" }],
+            "url": "{{baseUrl}}/posts/{{postId}}"
+          }
+        },
+        {
+          "name": "Delete Post",
+          "request": {
+            "method": "DELETE",
+            "header": [{ "key": "x-api-key", "value": "{{apiKey}}" }],
+            "url": "{{baseUrl}}/posts/{{postId}}"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Comments",
+      "item": [
+        {
+          "name": "Create Comment",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "x-api-key", "value": "{{apiKey}}" }
+            ],
+            "url": "{{baseUrl}}/posts/{{postId}}/comments",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user_id\": {{userId}},\n  \"content\": \"Great post! Thanks for sharing.\"\n}"
+            }
+          }
+        },
+        {
+          "name": "List Comments on Post",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "x-api-key", "value": "{{apiKey}}" }],
+            "url": "{{baseUrl}}/posts/{{postId}}/comments"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Likes",
+      "item": [
+        {
+          "name": "Like Post",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "x-api-key", "value": "{{apiKey}}" }
+            ],
+            "url": "{{baseUrl}}/posts/{{postId}}/like",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user_id\": {{userId}}\n}"
+            }
+          }
+        },
+        {
+          "name": "Unlike Post",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "x-api-key", "value": "{{apiKey}}" }
+            ],
+            "url": "{{baseUrl}}/posts/{{postId}}/like",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user_id\": {{userId}}\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Follows",
+      "item": [
+        {
+          "name": "Follow User",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "x-api-key", "value": "{{apiKey}}" }
+            ],
+            "url": "{{baseUrl}}/users/{{userId}}/follow",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"follower_id\": {{userId2}}\n}"
+            }
+          }
+        },
+        {
+          "name": "Unfollow User",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              { "key": "Content-Type", "value": "application/json" },
+              { "key": "x-api-key", "value": "{{apiKey}}" }
+            ],
+            "url": "{{baseUrl}}/users/{{userId}}/follow",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"follower_id\": {{userId2}}\n}"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Feed",
+      "item": [
+        {
+          "name": "Get Feed",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "x-api-key", "value": "{{apiKey}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/feed?user_id={{userId}}&workspace_id={{workspaceId}}",
+              "query": [
+                { "key": "user_id", "value": "{{userId}}" },
+                { "key": "workspace_id", "value": "{{workspaceId}}" }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Search",
+      "item": [
+        {
+          "name": "Search",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "x-api-key", "value": "{{apiKey}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/search?q=john&workspace_id={{workspaceId}}",
+              "query": [
+                { "key": "q", "value": "john" },
+                { "key": "workspace_id", "value": "{{workspaceId}}" }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Notifications",
+      "item": [
+        {
+          "name": "List Notifications",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "x-api-key", "value": "{{apiKey}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/notifications?user_id={{userId}}",
+              "query": [{ "key": "user_id", "value": "{{userId}}" }]
+            }
+          }
+        },
+        {
+          "name": "Mark Notification Read",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "x-api-key", "value": "{{apiKey}}" }],
+            "url": "{{baseUrl}}/notifications/{{notificationId}}/read"
+          }
+        }
+      ]
+    }
+  ]
+}
