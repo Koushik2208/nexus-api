@@ -5,7 +5,7 @@ interface FeedOptions {
   limit: number;
   cursor: number | undefined;
   sort: "newest" | "oldest";
-  userId?: number;
+  userId?: number | undefined;
 }
 
 export async function getFeed(
