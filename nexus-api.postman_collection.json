@@ -83,7 +83,7 @@
             "url": "{{baseUrl}}/users",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"workspace_id\": {{workspaceId}},\n  \"username\": \"john_doe\",\n  \"display_name\": \"John Doe\",\n  \"bio\": \"Hello, I am John!\",\n  \"avatar_url\": \"https://i.pravatar.cc/150?u=john\"\n}"
+              "raw": "{\n  \"username\": \"john_doe\",\n  \"display_name\": \"John Doe\",\n  \"bio\": \"Hello, I am John!\",\n  \"avatar_url\": \"https://i.pravatar.cc/150?u=john\"\n}"
             }
           }
         },
@@ -92,10 +92,7 @@
           "request": {
             "method": "GET",
             "header": [{ "key": "x-api-key", "value": "{{apiKey}}" }],
-            "url": {
-              "raw": "{{baseUrl}}/users?workspace_id={{workspaceId}}",
-              "query": [{ "key": "workspace_id", "value": "{{workspaceId}}" }]
-            }
+            "url": "{{baseUrl}}/users"
           }
         },
         {
@@ -154,7 +151,7 @@
             "url": "{{baseUrl}}/posts",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"workspace_id\": {{workspaceId}},\n  \"user_id\": {{userId}},\n  \"content\": \"Hello world! This is my first post.\",\n  \"image_url\": null\n}"
+              "raw": "{\n  \"user_id\": {{userId}},\n  \"content\": \"Hello world! This is my first post.\",\n  \"image_url\": null\n}"
             }
           }
         },
@@ -278,15 +275,22 @@
       "name": "Feed",
       "item": [
         {
-          "name": "Get Feed",
+          "name": "Get Feed (all posts)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "x-api-key", "value": "{{apiKey}}" }],
+            "url": "{{baseUrl}}/feed"
+          }
+        },
+        {
+          "name": "Get Feed (user-curated)",
           "request": {
             "method": "GET",
             "header": [{ "key": "x-api-key", "value": "{{apiKey}}" }],
             "url": {
-              "raw": "{{baseUrl}}/feed?user_id={{userId}}&workspace_id={{workspaceId}}",
+              "raw": "{{baseUrl}}/feed?user_id={{userId}}",
               "query": [
-                { "key": "user_id", "value": "{{userId}}" },
-                { "key": "workspace_id", "value": "{{workspaceId}}" }
+                { "key": "user_id", "value": "{{userId}}" }
               ]
             }
           }
@@ -302,10 +306,9 @@
             "method": "GET",
             "header": [{ "key": "x-api-key", "value": "{{apiKey}}" }],
             "url": {
-              "raw": "{{baseUrl}}/search?q=john&workspace_id={{workspaceId}}",
+              "raw": "{{baseUrl}}/search?q=john",
               "query": [
-                { "key": "q", "value": "john" },
-                { "key": "workspace_id", "value": "{{workspaceId}}" }
+                { "key": "q", "value": "john" }
               ]
             }
           }

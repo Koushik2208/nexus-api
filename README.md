@@ -648,6 +648,7 @@ Get a paginated feed of posts for the workspace, enriched with author info and c
 | `limit` | 20 | 1–100 | Items per page |
 | `cursor` | none | number | Last `post_id` from previous page |
 | `sort` | `newest` | `newest`, `oldest` | Sort order |
+| `user_id` | none | number | When provided, returns only posts from users this person follows |
 
 **Response** `200`
 ```json

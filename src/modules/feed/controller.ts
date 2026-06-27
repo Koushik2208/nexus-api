@@ -14,7 +14,13 @@ export async function list(req: Request, res: Response) {
 
   const sort = req.query.sort === "oldest" ? "oldest" : "newest";
 
-  const posts = await feedService.getFeed(workspaceId, { limit, cursor, sort });
+  const rawUserId = req.query.user_id;
+  const userId = rawUserId !== undefined ? Number(rawUserId) : undefined;
+  if (userId !== undefined && (!Number.isInteger(userId) || userId <= 0)) {
+    throw new ValidationError("user_id must be a positive integer");
+  }
+
+  const posts = await feedService.getFeed(workspaceId, { limit, cursor, sort, userId });
   const nextCursor = posts.length === limit ? posts[posts.length - 1]!.post_id : null;
 
   res.status(200).json({ posts, next_cursor: nextCursor });

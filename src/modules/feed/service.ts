@@ -5,27 +5,33 @@ interface FeedOptions {
   limit: number;
   cursor: number | undefined;
   sort: "newest" | "oldest";
+  userId?: number;
 }
 
 export async function getFeed(
   workspaceId: number,
   options: FeedOptions,
 ): Promise<FeedItem[]> {
-  const { limit, cursor, sort } = options;
+  const { limit, cursor, sort, userId } = options;
   const direction = sort === "oldest" ? "ASC" : "DESC";
   const cursorOp = sort === "oldest" ? ">" : "<";
 
+  const params: number[] = [workspaceId];
+  const conditions: string[] = ["workspace_id = $1"];
+
   if (cursor !== undefined) {
-    const result = await pool.query<FeedItem>(
-      `SELECT * FROM feed_view WHERE workspace_id = $1 AND post_id ${cursorOp} $2 ORDER BY post_id ${direction} LIMIT $3`,
-      [workspaceId, cursor, limit],
-    );
-    return result.rows;
+    params.push(cursor);
+    conditions.push(`post_id ${cursorOp} $${params.length}`);
   }
 
-  const result = await pool.query<FeedItem>(
-    `SELECT * FROM feed_view WHERE workspace_id = $1 ORDER BY post_id ${direction} LIMIT $2`,
-    [workspaceId, limit],
-  );
+  if (userId !== undefined) {
+    params.push(userId);
+    conditions.push(`user_id IN (SELECT following_id FROM follows WHERE follower_id = $${params.length})`);
+  }
+
+  params.push(limit);
+  const sql = `SELECT * FROM feed_view WHERE ${conditions.join(" AND ")} ORDER BY post_id ${direction} LIMIT $${params.length}`;
+
+  const result = await pool.query<FeedItem>(sql, params);
   return result.rows;
 }
