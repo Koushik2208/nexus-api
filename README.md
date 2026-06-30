@@ -363,17 +363,24 @@ Get a single user by ID.
 
 #### `GET /users/:id/posts`
 
-Get all posts written by a user, newest first.
+Get all posts written by a user, newest first. Returns the enriched post shape — same as feed items.
 
 **Response** `200`
 ```json
 [
   {
-    "id": 5,
+    "post_id": 5,
+    "workspace_id": 1,
     "user_id": 1,
+    "username": "john_doe",
+    "display_name": "John Doe",
+    "avatar_url": "...",
     "content": "Hello world",
     "image_url": null,
-    "created_at": "..."
+    "created_at": "...",
+    "like_count": 3,
+    "comment_count": 1,
+    "liked_by_me": null
   }
 ]
 ```
@@ -447,14 +454,22 @@ Only `user_id` and `content` are required.
 **Response** `201`
 ```json
 {
-  "id": 1,
+  "post_id": 1,
   "workspace_id": 1,
   "user_id": 1,
+  "username": "john_doe",
+  "display_name": "John Doe",
+  "avatar_url": "...",
   "content": "This is my first post!",
   "image_url": null,
-  "created_at": "..."
+  "created_at": "...",
+  "like_count": 0,
+  "comment_count": 0,
+  "liked_by_me": null
 }
 ```
+
+Returns the enriched post — same shape as a feed item. `liked_by_me` is always `null` here since there is no viewer context.
 
 ---
 
@@ -465,14 +480,22 @@ Get a single post by ID.
 **Response** `200`
 ```json
 {
-  "id": 1,
+  "post_id": 1,
   "workspace_id": 1,
   "user_id": 1,
+  "username": "john_doe",
+  "display_name": "John Doe",
+  "avatar_url": "...",
   "content": "This is my first post!",
   "image_url": null,
-  "created_at": "..."
+  "created_at": "...",
+  "like_count": 4,
+  "comment_count": 2,
+  "liked_by_me": null
 }
 ```
+
+Returns the enriched post — same shape as a feed item. `liked_by_me` is always `null` here since there is no viewer context.
 
 ---
 
@@ -649,6 +672,7 @@ Get a paginated feed of posts for the workspace, enriched with author info and c
 | `cursor` | none | number | Last `post_id` from previous page |
 | `sort` | `newest` | `newest`, `oldest` | Sort order |
 | `user_id` | none | number | When provided, returns only posts from users this person follows |
+| `viewer_id` | none | number | When provided, each post includes `liked_by_me` (true/false). Omit for null. |
 
 **Response** `200`
 ```json
@@ -665,7 +689,8 @@ Get a paginated feed of posts for the workspace, enriched with author info and c
       "display_name": "John Doe",
       "avatar_url": "...",
       "like_count": 12,
-      "comment_count": 3
+      "comment_count": 3,
+      "liked_by_me": true
     }
   ],
   "next_cursor": 5
@@ -673,6 +698,8 @@ Get a paginated feed of posts for the workspace, enriched with author info and c
 ```
 
 > Note: the cursor for feed uses `post_id`, not `id`.
+
+> `user_id` and `viewer_id` are separate concepts. `user_id` controls *whose* feed (posts from people they follow). `viewer_id` controls *who is looking* (used only to compute `liked_by_me`). They are usually the same person but can differ.
 
 ---
 

@@ -72,6 +72,7 @@ export interface FeedItem {
   avatar_url: string | null;
   like_count: number;
   comment_count: number;
+  liked_by_me: boolean | null;
 }
 
 export interface UserStats {

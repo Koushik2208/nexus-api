@@ -20,7 +20,13 @@ export async function list(req: Request, res: Response) {
     throw new ValidationError("user_id must be a positive integer");
   }
 
-  const posts = await feedService.getFeed(workspaceId, { limit, cursor, sort, userId });
+  const rawViewerId = req.query.viewer_id;
+  const viewerId = rawViewerId !== undefined ? Number(rawViewerId) : undefined;
+  if (viewerId !== undefined && (!Number.isInteger(viewerId) || viewerId <= 0)) {
+    throw new ValidationError("viewer_id must be a positive integer");
+  }
+
+  const posts = await feedService.getFeed(workspaceId, { limit, cursor, sort, userId, viewerId });
   const nextCursor = posts.length === limit ? posts[posts.length - 1]!.post_id : null;
 
   res.status(200).json({ posts, next_cursor: nextCursor });

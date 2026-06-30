@@ -296,6 +296,21 @@
               ]
             }
           }
+        },
+        {
+          "name": "Get Feed (with liked_by_me)",
+          "request": {
+            "method": "GET",
+            "header": [{ "key": "x-api-key", "value": "{{apiKey}}" }],
+            "url": {
+              "raw": "{{baseUrl}}/feed?user_id={{userId}}&viewer_id={{userId}}",
+              "query": [
+                { "key": "user_id", "value": "{{userId}}" },
+                { "key": "viewer_id", "value": "{{userId}}" }
+              ]
+            },
+            "description": "Pass viewer_id to get liked_by_me (boolean) on each post. Omit for null."
+          }
         }
       ]
     },

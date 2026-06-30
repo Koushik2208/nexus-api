@@ -11,7 +11,7 @@ export async function createPost(
   );
   const postId = inserted.rows[0]!.id;
   const result = await pool.query<FeedItem>(
-    "SELECT * FROM feed_view WHERE post_id = $1",
+    "SELECT fv.*, NULL::boolean AS liked_by_me FROM feed_view fv WHERE fv.post_id = $1",
     [postId],
   );
   return result.rows[0]!;
@@ -19,7 +19,7 @@ export async function createPost(
 
 export async function getPostById(id: number, workspaceId: number): Promise<FeedItem | null> {
   const result = await pool.query<FeedItem>(
-    "SELECT * FROM feed_view WHERE post_id = $1 AND workspace_id = $2",
+    "SELECT fv.*, NULL::boolean AS liked_by_me FROM feed_view fv WHERE fv.post_id = $1 AND fv.workspace_id = $2",
     [id, workspaceId],
   );
   return result.rows[0] ?? null;
@@ -27,7 +27,7 @@ export async function getPostById(id: number, workspaceId: number): Promise<Feed
 
 export async function getPostsByUserId(userId: number, workspaceId: number): Promise<FeedItem[]> {
   const result = await pool.query<FeedItem>(
-    "SELECT * FROM feed_view WHERE user_id = $1 AND workspace_id = $2 ORDER BY post_id DESC",
+    "SELECT fv.*, NULL::boolean AS liked_by_me FROM feed_view fv WHERE fv.user_id = $1 AND fv.workspace_id = $2 ORDER BY fv.post_id DESC",
     [userId, workspaceId],
   );
   return result.rows;
