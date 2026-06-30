@@ -1,28 +1,33 @@
 import pool from "../../db/pool.js";
-import type { Post } from "../../types/index.js";
+import type { Post, FeedItem } from "../../types/index.js";
 
 export async function createPost(
   data: Omit<Post, "id" | "created_at">,
-): Promise<Post> {
+): Promise<FeedItem> {
   const { workspace_id, user_id, content, image_url } = data;
-  const result = await pool.query<Post>(
-    "INSERT INTO posts (workspace_id, user_id, content, image_url) VALUES ($1, $2, $3, $4) RETURNING *",
+  const inserted = await pool.query<{ id: number }>(
+    "INSERT INTO posts (workspace_id, user_id, content, image_url) VALUES ($1, $2, $3, $4) RETURNING id",
     [workspace_id, user_id, content, image_url],
+  );
+  const postId = inserted.rows[0]!.id;
+  const result = await pool.query<FeedItem>(
+    "SELECT * FROM feed_view WHERE post_id = $1",
+    [postId],
   );
   return result.rows[0]!;
 }
 
-export async function getPostById(id: number, workspaceId: number): Promise<Post | null> {
-  const result = await pool.query<Post>(
-    "SELECT * FROM posts WHERE id = $1 AND workspace_id = $2",
+export async function getPostById(id: number, workspaceId: number): Promise<FeedItem | null> {
+  const result = await pool.query<FeedItem>(
+    "SELECT * FROM feed_view WHERE post_id = $1 AND workspace_id = $2",
     [id, workspaceId],
   );
   return result.rows[0] ?? null;
 }
 
-export async function getPostsByUserId(userId: number, workspaceId: number): Promise<Post[]> {
-  const result = await pool.query<Post>(
-    "SELECT * FROM posts WHERE user_id = $1 AND workspace_id = $2 ORDER BY id DESC",
+export async function getPostsByUserId(userId: number, workspaceId: number): Promise<FeedItem[]> {
+  const result = await pool.query<FeedItem>(
+    "SELECT * FROM feed_view WHERE user_id = $1 AND workspace_id = $2 ORDER BY post_id DESC",
     [userId, workspaceId],
   );
   return result.rows;

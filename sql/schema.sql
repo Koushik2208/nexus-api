@@ -70,6 +70,7 @@ CREATE TABLE notifications (
 CREATE INDEX idx_api_keys_workspace_id ON api_keys(workspace_id);
 CREATE INDEX idx_users_workspace_id ON users(workspace_id);
 CREATE INDEX idx_posts_workspace_id ON posts(workspace_id);
+CREATE INDEX idx_posts_workspace_id_id ON posts(workspace_id, id DESC);
 CREATE INDEX idx_posts_user_id ON posts(user_id);
 CREATE INDEX idx_comments_post_id ON comments(post_id);
 CREATE INDEX idx_comments_user_id ON comments(user_id);

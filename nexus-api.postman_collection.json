@@ -152,7 +152,8 @@
             "body": {
               "mode": "raw",
               "raw": "{\n  \"user_id\": {{userId}},\n  \"content\": \"Hello world! This is my first post.\",\n  \"image_url\": null\n}"
-            }
+            },
+            "description": "Returns enriched post (FeedItem shape): post_id, workspace_id, content, image_url, created_at, user_id, username, display_name, avatar_url, like_count, comment_count."
           }
         },
         {
@@ -160,7 +161,8 @@
           "request": {
             "method": "GET",
             "header": [{ "key": "x-api-key", "value": "{{apiKey}}" }],
-            "url": "{{baseUrl}}/posts/{{postId}}"
+            "url": "{{baseUrl}}/posts/{{postId}}",
+            "description": "Returns enriched post (FeedItem shape): post_id, workspace_id, content, image_url, created_at, user_id, username, display_name, avatar_url, like_count, comment_count."
           }
         },
         {
